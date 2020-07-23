@@ -1,5 +1,6 @@
 import errno
 import bluetooth
+import dbus
 
 class Blue():
 
@@ -8,35 +9,70 @@ class Blue():
     def send(self, sock, message):
         sock.send(b"\r\n" + message + b"\r\n")
 
+    def proxyobj(self, bus, path, interface):
+        ''' commodity to apply an interface to a proxy object '''
+        obj = bus.get_object('org.bluez', path)
+        return dbus.Interface(obj, interface)
+
+
+    def filter_by_interface(self, objects, interface_name):
+        """ filters the objects based on their support
+            for the specified interface """
+        result = []
+        for path in objects.keys():
+            interfaces = objects[path]
+            for interface in interfaces.keys():
+                if interface == interface_name:
+                    result.append(path)
+        return result
+
+    def get_device_port(self, device_address):
+        services = bluetooth.find_service(address=device_address)
+
+        headphone_device = "HANDSFREE"
+        
+        port = 0
+        for dici in services:
+            if str(dici.get("name")).upper() == headphone_device:
+                port = dici.get("port")
+                break
+
+        return port
+
     def get_bluetooth_devices(self):
-        devices = bluetooth.discover_devices(lookup_names=True)
-        services = bluetooth.find_service()
-        headphone_class = ['111E','1203']
 
-        devices_index = 0
-        drop_devices =[]
+        bus = dbus.SystemBus()
+
+        # we need a dbus object manager
+        manager = self.proxyobj(bus, "/", "org.freedesktop.DBus.ObjectManager")
+        objects = manager.GetManagedObjects()
+
+        # once we get the objects we have to pick the bluetooth devices.
+        # They support the org.bluez.Device1 interface
+        devices = self.filter_by_interface(objects, "org.bluez.Device1")
+
+        bt_devices = []
+        
         for device in devices:
-            for item in services:
-                if item.get('host') == device[0]:
-                    if item.get('service-classes') == headphone_class:
-                        port = ()
-                        port += (item.get('port'),)
-                        devices[devices_index] += port
-                        break
-                    else:
-                        drop_devices.append(devices_index)
-                        break
-            devices_index += 1
+            obj = self.proxyobj(bus, device, 'org.freedesktop.DBus.Properties')
+            bt_devices.append({
+                "name": str(obj.Get("org.bluez.Device1", "Name")),
+                "address": str(obj.Get("org.bluez.Device1", "Address")),
+                "port": self.get_device_port(str(obj.Get("org.bluez.Device1", "Address")))
+            })  
 
-        for index in drop_devices:
-            del devices[index]
+        devices_number = len(bt_devices)
 
-        self.devices_list = devices.copy()
+        for device_index in range(devices_number):
+            if int(bt_devices[device_index].get("port")) == 0:
+                del bt_devices[device_index]
+
+        self.devices_list = bt_devices.copy()   
 
     def get_battery_level(self, device):
         
-        address = device[0]
-        port = device[2]
+        address = str(device.get("address"))
+        port = int(device.get("port"))
 
         try:
             socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
@@ -81,7 +117,7 @@ class Blue():
                     self.send(socket, b"OK")
 
                 if blevel != -1:
-                    print(f"Battery level for {device[1]} is {blevel}%")
+                    #print(f"Battery level for {device} is {blevel}%")
                     con_open = False
                 else:
                     con_open = True
@@ -91,4 +127,5 @@ class Blue():
             return blevel
 
         except OSError as e:
-            print(f"{device} is offline", e)
+            #print(f"{str(device.get("name"))} is offline", e)
+            pass

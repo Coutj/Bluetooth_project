@@ -22,29 +22,23 @@ listBox.pack(expand = True, fill=tk.BOTH, side=tk.BOTTOM)
 
 
 def handle_button_click(event):
+   
     print("cliquei")
+    listBox.delete(0,tk.END)
     blueClass.get_bluetooth_devices()
-
     index = 0
     for device in blueClass.devices_list:
-        listBox.insert(index, device[1] + " - " + device[0]  + " ?")
-        index= index + 1
+        listBox.insert(index, str(device.get("name"))  + " ?")
+        index += 1
 
 def handle_listBox_click(event):
-    selected_line = listBox.curselection()
-    listBox_string = listBox.get(selected_line)
-    listBox_string_split = listBox_string.split(" ")
-
-    address = listBox_string_split[len(listBox_string_split) - 2]
-    selected_device = []
-    for device in blueClass.devices_list:
-        if device[0] == address:
-            selected_device = device
-            
+    
+    selected_line = int(str(listBox.curselection()[0]))
+    selected_device = dict()
+    selected_device = blueClass.devices_list[selected_line].copy()      
     battery_level = blueClass.get_battery_level(selected_device)
     listBox.delete(selected_line)
-    listBox_string = selected_device[1] + " - " +selected_device[0]
-    listBox.insert(selected_line, listBox_string + " " +  str(battery_level) + "%")
+    listBox.insert(selected_line, selected_device.get("name") + " " +  str(battery_level) + "%")
 
 button.bind("<Button-1>", handle_button_click)
 listBox.bind('<Double-1>', handle_listBox_click)
