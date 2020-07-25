@@ -1,6 +1,7 @@
 import errno
 import bluetooth
 import dbus
+import time
 
 class Blue():
 
@@ -63,11 +64,13 @@ class Blue():
 
         devices_number = len(bt_devices)
 
-        for device_index in range(devices_number):
+        for device_index in range(devices_number - 1):
             if int(bt_devices[device_index].get("port")) == 0:
                 del bt_devices[device_index]
 
-        self.devices_list = bt_devices.copy()   
+        self.devices_list = bt_devices.copy()
+
+        return self.devices_list
 
     def get_battery_level(self, device):
         
@@ -121,7 +124,7 @@ class Blue():
                     con_open = False
                 else:
                     con_open = True
-                    print(line)
+                    #print(line)
                     
             socket.close()
             return blevel
@@ -129,3 +132,4 @@ class Blue():
         except OSError as e:
             #print(f"{str(device.get("name"))} is offline", e)
             pass
+
