@@ -6,7 +6,7 @@ import time
 class Blue():
 
     devices_list = []
-
+    
     def send(self, sock, message):
         ''' send messages to bluetooth device'''
         sock.send(b"\r\n" + message + b"\r\n")
