@@ -8,13 +8,13 @@ class Blue():
     devices_list = []
 
     def send(self, sock, message):
+        ''' send messages to bluetooth device'''
         sock.send(b"\r\n" + message + b"\r\n")
 
     def proxyobj(self, bus, path, interface):
         ''' commodity to apply an interface to a proxy object '''
         obj = bus.get_object('org.bluez', path)
         return dbus.Interface(obj, interface)
-
 
     def filter_by_interface(self, objects, interface_name):
         """ filters the objects based on their support
@@ -26,15 +26,14 @@ class Blue():
                 if interface == interface_name:
                     result.append(path)
         return result
-
+    
     def get_device_port(self, device_address):
         services = bluetooth.find_service(address=device_address)
-
-        headphone_device = "HANDSFREE"
-        
+        headphone_profile = [('111E', 263,)]
         port = 0
         for dici in services:
-            if str(dici.get("name")).upper() == headphone_device:
+            profile = dici.get("profiles")
+            if  profile == headphone_profile and profile:
                 port = dici.get("port")
                 break
 
@@ -63,12 +62,13 @@ class Blue():
             })  
 
         devices_number = len(bt_devices)
+        headphone_devices = list()
 
         for device_index in range(devices_number - 1):
-            if int(bt_devices[device_index].get("port")) == 0:
-                del bt_devices[device_index]
+            if int(bt_devices[device_index].get("port")) != 0:
+                headphone_devices.append(bt_devices[device_index])  
 
-        self.devices_list = bt_devices.copy()
+        self.devices_list = headphone_devices.copy()
 
         return self.devices_list
 

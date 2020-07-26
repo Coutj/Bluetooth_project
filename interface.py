@@ -11,8 +11,6 @@ import errno
 
 blueClass = blueP.Blue()
 
-
-
 class GUI:
     state = True
     pip = queue.Queue()
@@ -33,44 +31,32 @@ class GUI:
         self.listBox = tk.Listbox(master=master, font=self.bigfont, width=26, height=6)
         self.listBox.grid(row=2, column=0,  sticky="we", padx=2)
 
-    def handle_button_click(self, event):
-        
-        print("cliquei")
+    def handle_button_click(self, event):   
         self.listBox.delete(0,tk.END)
-
-        
         self.event = threading.Event()
         self.event.set()
-        
-        thread1 = threading.Thread(target=external_threads.producer, args=(self.pip, self.event,), daemon=True)
-        thread1.start()
-
-        '''with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            executor.submit(pipeline.producer, self.pip, self.event)
-            #executor.submit(pipeline.blink, self.pip, self.event)'''
-
+        thread_get_bt_devices = threading.Thread(target=external_threads.producer, args=(self.pip, self.event,), daemon=True)
+        thread_get_bt_devices.start()
         self.master.after(100, self.process_queue, self.pip)
 
-    def hide_icon(self):
+    def hide_bt_icon(self):
         self.canvas.grid_remove()
 
-    def show_icon(self):
+    def show_bt_icon(self):
         self.canvas.grid()
 
     def process_queue(self, queue):
         try:
             blueClass.devices_list = queue.get(0)
             self.pop_listBox()
-            self.show_icon()
-        except Exception as e:
-            
+            self.show_bt_icon()
+        except Exception as e:         
             if self.state == True:
                 self.state = False
-                self.hide_icon()
+                self.hide_bt_icon()
             else:
                 self.state = True
-                self.show_icon()
-            print(self.state)
+                self.show_bt_icon()
     
             self.master.after(300, self.process_queue, queue)
 
