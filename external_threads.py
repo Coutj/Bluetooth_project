@@ -1,6 +1,5 @@
 import queue
 import blueP
-import time
 
 
 blueClass = blueP.Blue()

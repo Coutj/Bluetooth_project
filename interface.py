@@ -1,10 +1,8 @@
 from PIL import Image, ImageTk
-import concurrent.futures
 import threading
 import tkinter as tk
 import tkinter.font
 import blueP
-import time
 import queue
 import external_threads
 import errno
