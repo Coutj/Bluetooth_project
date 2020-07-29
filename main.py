@@ -5,7 +5,7 @@ import sys
 
 import blueP
 import external_threads
-sys.path.insert(0, 'GUI')
+#sys.path.insert(0, 'GUI')
 from GUI import GUI
 
 class main_window(QtWidgets.QMainWindow):
@@ -140,7 +140,9 @@ class main_window(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     blueClass = blueP.Blue()
-    app = QtWidgets.QApplication([])
+    app = QtWidgets.QApplication(sys.argv)
+    window = QtWidgets.QMainWindow()
     application = main_window()
     application.show()
-    sys.exit(app.exec())
+
+    sys.exit(app.exec_())
