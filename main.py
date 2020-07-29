@@ -5,7 +5,6 @@ import sys
 
 import blueP
 import external_threads
-#sys.path.insert(0, 'GUI')
 from GUI import GUI
 
 class main_window(QtWidgets.QMainWindow):
