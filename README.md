@@ -4,6 +4,7 @@ GUI application to present the battery level of bluetooth devices (Inspired by T
 This application uses dbus modules. It will not work on windows.
 
 pip install pybluez
+
 pip install pyqt5
 
 #to run the application use:
