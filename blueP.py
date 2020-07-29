@@ -27,7 +27,7 @@ class Blue():
                     result.append(path)
         return result
     
-    def get_device_port(self, device_address):
+    def get_device_port(self, device_address,):
         services = bluetooth.find_service(address=device_address)
         headphone_profile = [('111E', 263,)]
         port = 0

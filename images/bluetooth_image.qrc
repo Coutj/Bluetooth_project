@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="bt_image">
+    <file>bluetooth_image.png</file>
+    <file>bluetooth_window_icon.png</file>
+  </qresource>
+</RCC>
