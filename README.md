@@ -19,7 +19,7 @@ python main.py
 
 (1) Press de load button to get all paired headsets.
 
-(2) Double click the headset name that appeared in the list and wait for the battery indicator
+(2) Double click the headset name that appeared in the list and wait for the battery indicator.
 
 
 
