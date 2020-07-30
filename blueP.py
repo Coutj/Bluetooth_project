@@ -61,12 +61,10 @@ class Blue():
                 "port": self.get_device_port(str(obj.Get("org.bluez.Device1", "Address")))
             })  
 
-        devices_number = len(bt_devices)
         headphone_devices = list()
-
-        for device_index in range(devices_number - 1):
-            if int(bt_devices[device_index].get("port")) != 0:
-                headphone_devices.append(bt_devices[device_index])  
+        for device in bt_devices:
+            if device.get("port") != 0:
+                headphone_devices.append(device)
 
         self.devices_list = headphone_devices.copy()
 
