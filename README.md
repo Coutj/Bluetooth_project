@@ -7,22 +7,27 @@ GUI application to present the battery level of bluetooth headsets in linux (Ins
 Double click the executable file
 or follow the next steps on terminal
 
+```bash
 pip install pybluez
 
 pip install pyqt5
 
 python main.py
+```
 
 # How to use it
 
-Press de load button to get all paired headsets. 
-Double click the headset name that appeared in the list and wait for the battery indicator
+(1) Press de load button to get all paired headsets.
+
+(2) Double click the headset name that appeared in the list and wait for the battery indicator
 
 
 
 
 
+### Credits
 
+https://github.com/TheWeirdDev/
 
 Icons made by:
 
