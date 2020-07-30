@@ -4,7 +4,7 @@ GUI application to present the battery level of bluetooth headsets in linux (Ins
 This application uses dbus modules. It will not work on windows.
 
 # How to run this application:
-double click the "main" executable archive
+double click the executable file
 or follow the next steps on terminal
 
 pip install pybluez
