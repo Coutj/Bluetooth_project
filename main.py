@@ -14,7 +14,7 @@ class main_window(QtWidgets.QMainWindow):
     pip_battery = queue.Queue()
     process_queue_get_battery_delay = 200
     process_queue_get_devices_delay = 300
-    limit_time_to_reach_device = 50 * process_queue_get_battery_delay
+    limit_time_to_reach_device = 100 * process_queue_get_battery_delay
     process_battery_timer = 0
 
     def __init__(self):
@@ -77,10 +77,11 @@ class main_window(QtWidgets.QMainWindow):
                 self.state = True
                 self.show_bt_icon()
             
-            if self.process_battery_timer == self.limit_time_to_reach_device:
+            if self.process_battery_timer >= self.limit_time_to_reach_device:
                 self.info_message("Impossible to reach {}".format(blueClass.devices_list[device_index].get("name")))
                 self.enable_button()
                 self.show_bt_icon()
+                self.process_battery_timer = 0
             else:
                 QtCore.QTimer.singleShot(self.process_queue_get_battery_delay, lambda: self.process_queue_get_battery(device_index))
 
