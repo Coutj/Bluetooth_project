@@ -50,13 +50,14 @@ class main_window(QtWidgets.QMainWindow):
             self.pop_listBox()
             self.show_bt_icon()
             self.enable_button()
+            self.state = True
         except Exception as e:         
-            if self.state == True:
+            if self.state == False:
+                self.state = True
+                self.show_bt_icon()             
+            else:
                 self.state = False
                 self.hide_bt_icon()
-            else:
-                self.state = True
-                self.show_bt_icon()
 
             QtCore.QTimer.singleShot(self.process_queue_get_devices_delay, self.process_queue_get_devices)
 
@@ -67,13 +68,14 @@ class main_window(QtWidgets.QMainWindow):
             self.add_battery_level_lb(message, device_index)
             self.show_bt_icon()
             self.enable_button()
+            self.state = True
         except Exception as e:
-            if self.state == True:
-                self.state = False
-                self.hide_bt_icon()
-            else:
+            if self.state == False:
                 self.state = True
                 self.show_bt_icon()
+            else:
+                self.state = False
+                self.hide_bt_icon()
             
             if self.process_battery_timer >= self.limit_time_to_reach_device:
                 self.info_message("Impossible to reach {}".format(blueClass.devices_list[device_index].get("name")))
