@@ -66,9 +66,9 @@ class Blue():
             if device.get("port") != 0:
                 headphone_devices.append(device)
 
-        self.devices_list = headphone_devices.copy()
-
-        return self.devices_list
+        Blue.devices_list = headphone_devices.copy()
+         
+        return Blue.devices_list
 
     def get_battery_level(self, device):
         

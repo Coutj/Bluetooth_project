@@ -31,7 +31,7 @@ class main_window(QtWidgets.QMainWindow):
         self.event.set()
         thread_get_bt_devices = threading.Thread(target=external_threads.get_headsets_devices, args=(self.pip_devices, self.event,), daemon=True)
         thread_get_bt_devices.start()
-        QtCore.QTimer.singleShot(500, self.process_queue_get_devices)
+        QtCore.QTimer.singleShot(100, self.process_queue_get_devices)
 
     def handle_listBox_click(self, event):
         self.disable_button()     
@@ -46,8 +46,7 @@ class main_window(QtWidgets.QMainWindow):
 
     def process_queue_get_devices(self):
         try:
-            message = self.pip_devices.get(block=False)
-            blueClass.devices_list = message
+            self.pip_devices.get(block=False)
             self.pop_listBox()
             self.show_bt_icon()
             self.enable_button()
@@ -65,7 +64,6 @@ class main_window(QtWidgets.QMainWindow):
         try:
             self.process_battery_timer += self.process_queue_get_battery_delay 
             message = self.pip_battery.get(block=False)
-            message = int(message)
             self.add_battery_level_lb(message, device_index)
             self.show_bt_icon()
             self.enable_button()
@@ -99,7 +97,7 @@ class main_window(QtWidgets.QMainWindow):
         widget = QtWidgets.QWidget()
         widgetLayout = QtWidgets.QHBoxLayout()
         widgetLayout.setContentsMargins(200,2,0,2)
-        progressBar = self.listbox_Item(battery_level)   
+        progressBar = self.listbox_progressBar(battery_level)   
         widgetLayout.addWidget(progressBar)
         widget.setLayout(widgetLayout)
         
@@ -118,8 +116,9 @@ class main_window(QtWidgets.QMainWindow):
     def hide_bt_icon(self):
         self.ui.bt_icon.hide()
 
-    def listbox_Item(self, battery_level):
+    def listbox_progressBar(self, battery_level):
         #progress bar
+        battery_level = int(battery_level)
         font = QtGui.QFont()
         font.setPointSize(9)
         battery_bar = QtWidgets.QProgressBar(self.ui.centralwidget)
