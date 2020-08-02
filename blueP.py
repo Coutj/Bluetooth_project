@@ -29,10 +29,11 @@ class Blue():
     
     def get_device_port(self, device_address,):
         services = bluetooth.find_service(address=device_address)
-        headphone_profile = [('111E', 263,)]
+        bluetooth.HEADSET_CLASS
+        headphone_profile = ['111E', '1203']
         port = 0
         for dici in services:
-            profile = dici.get("profiles")
+            profile = dici.get("service-classes")
             if  profile == headphone_profile and profile:
                 port = dici.get("port")
                 break
