@@ -14,12 +14,15 @@ pip install pyqt5
 
 python main.py
 ```
+optional step: run add_to_interface to put the program in your system menu
 
 # How to use it
 
 (1) Press de load button to get all paired headsets.
 
 (2) Double click the headset name that appeared in the list and wait for the battery indicator.
+
+
 
 # Donate
 
