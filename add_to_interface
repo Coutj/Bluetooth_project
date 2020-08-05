@@ -1,0 +1,40 @@
+#!/bin/python3
+
+import shutil
+import os
+import sys
+
+name =  "Battery Level"
+exec_path = "/usr/local/bin/Headset_Battery_Level"
+icon_path = "/usr/share/icons/hicolor/512x512/apps/battery_level_headset.png"
+entry_location = "/usr/share/applications"
+
+
+def add():
+    shutil.copy("./Headset_Battery_Level", "/usr/local/bin/Headset_Battery_Level")
+    shutil.copy("./images/bluetooth_window_icon.png", icon_path)
+    desktop_entry = "[Desktop Entry]\n\tName={0}\n\tExec={1}\n\tIcon={2}\n\tType=Application".format(name, exec_path,icon_path)
+    open(entry_location + "/battery_level.desktop", "w").write(desktop_entry)
+
+def remove():
+    os.remove("/usr/local/bin/Headset_Battery_Level")
+    os.remove(icon_path)
+    os.remove(entry_location + "/battery_level.desktop")
+
+def help_message():
+    print("\nUsage:\n\t--add \t\tto create desktop entry\n\t--remove \tto remove desktop entry and files" )
+
+
+if os.getuid() != 0:
+    print("\nYou need root privileges to run this script")
+
+if len(sys.argv) == 1 or len(sys.argv) > 2:
+    help_message()
+elif sys.argv[1] == "--add":
+    add()
+elif sys.argv[1] == "--remove":
+    remove()
+else:
+    help_message()
+
+sys.exit()
