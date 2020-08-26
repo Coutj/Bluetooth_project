@@ -14,6 +14,25 @@ pip install pyqt5
 
 python main.py
 ```
+
+Note:
+if you see errors like-
+
+```
+    In file included from bluez/btmodule.c:20:
+    bluez/btmodule.h:5:10: fatal error: bluetooth/bluetooth.h: No such file or directory
+        5 | #include <bluetooth/bluetooth.h>
+          |          ^~~~~~~~~~~~~~~~~~~~~~~
+    compilation terminated.
+    error: command 'x86_64-linux-gnu-gcc' failed with exit status 1
+```
+
+install libbluetooth-dev
+
+```
+sudo apt install libbluetooth-dev
+```
+
 optional step: run add_to_interface to put the program in your system menu
 
 # How to use it
