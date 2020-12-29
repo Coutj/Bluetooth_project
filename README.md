@@ -12,7 +12,7 @@ sh setup.sh
 
 2. Double click the executable file or run on terminal
 ```bash
-python main.py
+python3 main.py
 ```
 
 Note:
